@@ -28,12 +28,12 @@ export const List = styled.li<GMXStatsProps>`
   strong {
     font-weight: 500;
     color: ${({ status, theme: { colors } }) =>
-      status === 'better'
+      status === 'better' || status === 'positive'
         ? colors.success
         : status === 'worse'
         ? colors.lighterGray
-        : status === 'equal'
-        ? colors.white
+        : status === 'negative'
+        ? colors.error
         : colors.white};
   }
 `

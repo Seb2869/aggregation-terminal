@@ -24,7 +24,7 @@ export const formatPosition = (
   const notionalValue = wei(size).mul(wei(basePrice))
   const leverage = notionalValue.div(wei(margin))
 
-  const priceImpact = wei(price).sub(basePrice).div(basePrice)
+  const priceImpact = wei(wei(preview.price).sub(basePrice)).div(basePrice)
   const slippageDirection = nativeSizeDelta.gt(0)
     ? priceImpact.gt(0)
       ? -1

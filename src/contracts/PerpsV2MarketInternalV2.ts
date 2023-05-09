@@ -40,6 +40,7 @@ type PostTradeDetailsResponse = {
 export class FuturesMarketInternal {
   _onChainData: {
     assetPrice: BigNumber
+    fillPrice: BigNumber
     marketSkew: BigNumber
     marketSize: BigNumber
     fundingSequenceLength: BigNumber
@@ -53,9 +54,10 @@ export class FuturesMarketInternal {
   _marketParams: MarketParams
   _position: Position
 
-  constructor(marketData: MarketData, marketParams: MarketParams) {
+  constructor(marketData: MarketData, marketParams: MarketParams, fillPrice: BigNumber) {
     this._onChainData = {
       assetPrice: marketData.assetPrice,
+      fillPrice,
       marketSkew: marketData.marketSkew,
       marketSize: marketData.marketSize,
       fundingSequenceLength: marketData.fundingSequenceLength,
@@ -74,7 +76,7 @@ export class FuturesMarketInternal {
     this._onChainData.blockTimestamp = blockTimestamp
 
     const position = this._position
-    const price = this._onChainData.assetPrice
+    const price = this._onChainData.fillPrice
     const takerFee = this._marketParams.takerFee
     const makerFee = this._marketParams.makerFee
 

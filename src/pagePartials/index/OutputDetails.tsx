@@ -1,15 +1,16 @@
+import { wei } from '@synthetixio/wei'
 import { BigNumber } from 'ethers'
 import { motion } from 'framer-motion'
 
 import { Tooltip } from '@/src/components/common/Tooltip'
 import { List, Stats } from '@/src/components/text/List'
 import { formatAmount } from '@/src/utils/GMX/format'
+import { ZERO_BIG_NUM } from '@/src/utils/KWENTA/constants'
 import { Position, ProtocolStats } from '@/types/utils'
 
 function setStyle(value?: BigNumber, comparison?: BigNumber) {
-  if (!comparison || !value || value.eq(comparison)) {
-    return 'equal'
-  }
+  if (!comparison) return value?.lte(ZERO_BIG_NUM) ? 'negative' : 'positive'
+  if (!value || value.eq(comparison)) return 'equal'
   return comparison.gt(value) ? 'better' : 'worse'
 }
 
@@ -43,13 +44,6 @@ export function OutputDetails({ comparison, local, margin, positionSide, tokenSy
         : 'The cost of swapping tokens to execute the trade.'
     return text
   }
-  const getKeeperFeeText = (protocol: string) => {
-    const text =
-      protocol === 'Kwenta'
-        ? 'Fixed fee to cover automated order execution'
-        : 'The cost of opening a position.'
-    return text
-  }
   const get1hrFundingText = (protocol: string) => {
     const text =
       protocol === 'Kwenta'
@@ -67,7 +61,11 @@ export function OutputDetails({ comparison, local, margin, positionSide, tokenSy
       </List>
       <List
         as={motion.li}
-        status={setStyle(comparison?.fillPrice, local.fillPrice)}
+        status={
+          positionSide == 'long'
+            ? setStyle(local.fillPrice, comparison?.fillPrice)
+            : setStyle(comparison?.fillPrice, local.fillPrice)
+        }
         variants={itemVariants}
       >
         <span>
@@ -103,11 +101,7 @@ export function OutputDetails({ comparison, local, margin, positionSide, tokenSy
           {formatAmount(local.orderSize)} {tokenSymbol}
         </strong>
       </List>
-      <List
-        as={motion.li}
-        status={setStyle(local.priceImpact, comparison?.priceImpact)}
-        variants={itemVariants}
-      >
+      <List as={motion.li} variants={itemVariants}>
         <span>
           <Tooltip text="Correlation between the incoming trade, and the price of the asset.">
             Price Impact
@@ -115,27 +109,35 @@ export function OutputDetails({ comparison, local, margin, positionSide, tokenSy
         </span>
         <strong>{formatAmount(local.priceImpact)}</strong>
       </List>
+      <List as={motion.li} variants={itemVariants}>
+        <span>
+          <Tooltip text="Fees the protocol charges for opening a position.">Protocol Fee</Tooltip>
+        </span>
+        <strong>
+          {local.protocol === 'Kwenta' ? '-' : formatAmount(local.protocolFee, 18, 2)}{' '}
+        </strong>
+      </List>
       <List
         as={motion.li}
-        status={setStyle(local.protocolFee, comparison?.protocolFee)}
+        status={setStyle(local.swapFee, comparison?.swapFee)}
         variants={itemVariants}
       >
         <span>
-          <Tooltip text="Overall fees the protocol charges for a trade.">Protocol Fee</Tooltip>
+          <Tooltip text={getTradeFeeText(local.protocol)}>
+            {local.protocol === 'Kwenta' ? 'Trade Fee' : 'Swap Fee'}{' '}
+          </Tooltip>
         </span>
-        <strong>{formatAmount(local.protocolFee, 18, 2)} </strong>
+        <strong>{formatAmount(local.swapFee, 18, 2)}</strong>
       </List>
-      <List as={motion.li} variants={itemVariants}>
+      <List
+        as={motion.li}
+        status={setStyle(local.executionFee, comparison?.executionFee)}
+        variants={itemVariants}
+      >
         <span>
-          <Tooltip text={getTradeFeeText(local.protocol)}>Trade Fee </Tooltip>
+          <Tooltip text="Fixed fee to cover automated order execution">Execution Fee</Tooltip>
         </span>
-        <strong>{formatAmount(local.tradeFee, 18, 2)}</strong>
-      </List>
-      <List as={motion.li} variants={itemVariants}>
-        <span>
-          <Tooltip text={getKeeperFeeText(local.protocol)}>Position Fee</Tooltip>
-        </span>
-        <strong>{formatAmount(local.keeperFee, 18, 2)}</strong>
+        <strong>{formatAmount(local.executionFee, 18, 2)}</strong>
       </List>
 
       <List
@@ -152,15 +154,7 @@ export function OutputDetails({ comparison, local, margin, positionSide, tokenSy
         </span>
         <strong>{formatAmount(local.liquidationPrice, 18, 2)}</strong>
       </List>
-      <List
-        as={motion.li}
-        status={
-          positionSide == 'long' && local.oneHourFunding?.lt(0)
-            ? setStyle(comparison?.oneHourFunding, local.oneHourFunding)
-            : setStyle(local.oneHourFunding, comparison?.oneHourFunding)
-        }
-        variants={itemVariants}
-      >
+      <List as={motion.li} variants={itemVariants}>
         <span>
           <Tooltip text={get1hrFundingText(local.protocol)}>1H Funding</Tooltip>
         </span>

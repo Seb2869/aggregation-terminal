@@ -163,8 +163,8 @@ export async function getGMXStatsFetcher(
     orderSize: nextToAmount, // 18
     priceImpact: undefined,
     protocolFee: feesUsd.div(BigNumber.from(10).pow(USD_DECIMALS - 18)),
-    tradeFee: swapFees.div(BigNumber.from(10).pow(USD_DECIMALS - 18)),
-    keeperFee: positionFee.div(BigNumber.from(10).pow(USD_DECIMALS - 18)),
+    swapFee: swapFees.div(BigNumber.from(10).pow(USD_DECIMALS - 18)),
+    executionFee: positionFee.div(BigNumber.from(10).pow(USD_DECIMALS - 18)),
     liquidationPrice: liquidationPrice.div(BigNumber.from(10).pow(USD_DECIMALS - 18)),
     oneHourFunding: borrowFeeAmount.div(BigNumber.from(10).pow(USD_DECIMALS - 18)),
   }

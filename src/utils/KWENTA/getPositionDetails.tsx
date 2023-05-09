@@ -33,11 +33,12 @@ const zeroStatePreview = {
 export function getTradePreview(
   sizeDelta: Wei,
   marginDelta: Wei,
+  fillPrice: BigNumber,
   marketData: MarketData,
   marketParams: MarketParams,
   blockTimestamp: number,
 ): TradePreviewResponse {
-  const marketInternal = new PerpsV2MarketInternalV2(marketData, marketParams)
+  const marketInternal = new PerpsV2MarketInternalV2(marketData, marketParams, fillPrice)
   const tradePreview = marketInternal.getTradePreview(
     sizeDelta.toBN(), // sizeDelta => orderSize (SUSD) / assetRate (ETH USD MARKET VALUE)
     marginDelta.toBN(), // marginDelta => sizeDelta * assetRate / leverageInput

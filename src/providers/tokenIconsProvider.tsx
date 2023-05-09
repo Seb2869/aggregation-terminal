@@ -37,10 +37,20 @@ const useTokenListQuery = () => {
       }),
     )
     const tokenList = tokenLists.flatMap((tokenList) => tokenList.tokens)
-
     const { tokens, tokensByAddress, tokensByNetwork, tokensBySymbol } = tokenList.reduce(
       (acc: TokenListQueryReturn, token) => {
         const address = token.address.toLowerCase()
+
+        if (!acc.tokensByNetwork[token.chainId]) {
+          acc.tokensByNetwork[token.chainId] = [token]
+        } else {
+          const included = acc.tokensByNetwork[token.chainId].find(
+            (t) => t.address == token.address,
+          )
+          if (!included) {
+            acc.tokensByNetwork[token.chainId].push(token)
+          }
+        }
 
         if (acc.tokensByAddress[address]) {
           return acc
@@ -49,12 +59,6 @@ const useTokenListQuery = () => {
         acc.tokens.push(token)
         acc.tokensByAddress[address] = token
         acc.tokensBySymbol[token.symbol.toLowerCase()] = token
-
-        if (!acc.tokensByNetwork[token.chainId]) {
-          acc.tokensByNetwork[token.chainId] = [token]
-        } else {
-          acc.tokensByNetwork[token.chainId].push(token)
-        }
 
         return acc
       },

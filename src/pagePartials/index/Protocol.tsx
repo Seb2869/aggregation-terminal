@@ -24,6 +24,26 @@ const Card = styled(BaseCard)`
 
 const OutputWrapper = styled.div`
   overflow: hidden;
+  text-align: center;
+`
+
+const PlatformLink = styled.a`
+  border-radius: ${({ theme: { card } }) => card.borderRadius};
+  outline: none;
+  white-space: nowrap;
+  transition: all 0.1s ease-in-out 0s;
+  background: rgb(37, 37, 37);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: ${({ theme }) => theme.colors.textColor};
+  padding: 10px 30px;
+  display: inline-flex;
+  text-decoration: none;
+  margin-top: 30px;
+  &:hover,
+  &:focus {
+    background-color: ${({ theme: { buttonPrimary } }) => buttonPrimary.backgroundColorHover};
+    color: ${({ theme: { buttonPrimary } }) => buttonPrimary.colorHover};
+  }
 `
 
 type Props = {
@@ -124,6 +144,9 @@ export const Protocol: React.FC<Props> = ({
               positionSide={tradeForm.position}
               tokenSymbol={tradeForm.token}
             />
+            <PlatformLink href={protocolForm.url} rel="noreferrer" target="_blank">
+              Go to {protocolForm.name}
+            </PlatformLink>
           </OutputWrapper>
         )}
       </AnimatePresence>

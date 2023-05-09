@@ -13,7 +13,7 @@ export const divideDecimal = (x: BigNumber, y: BigNumber) => {
 export const multiplyDecimal = (x: BigNumber, y: BigNumber) => {
   return x.mul(y).div(UNIT_BIG_NUM)
 }
-export const KWENTA_FIXED_FEE = wei(2)
+export const KWENTA_FIXED_FEE = wei(4)
 export const KWENTA_TRACKING_CODE = formatBytes32String('KWENTA')
 
 export const ADDITIONAL_SYNTHS = [

@@ -94,8 +94,8 @@ export interface ProtocolStats {
   orderSize?: BigNumber
   priceImpact?: BigNumber
   protocolFee?: BigNumber
-  tradeFee?: BigNumber
-  keeperFee?: BigNumber
+  swapFee?: BigNumber
+  executionFee?: BigNumber
   liquidationPrice?: BigNumber
   oneHourFunding?: BigNumber
 }
@@ -103,4 +103,5 @@ export interface ProtocolStats {
 export interface ProtocolForm {
   name: ProtocolNames
   chain: ChainsValues
+  url: string
 }
