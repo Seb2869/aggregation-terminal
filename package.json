@@ -14,7 +14,8 @@
     "typechain": "typechain --target=ethers-v5 \"./src/contracts/**/*.json\" --out-dir ./types/generated/typechain/",
     "subgraph-codegen": "graphql-codegen --config subgraph-config.js",
     "types-gen": "yarn typechain ",
-    "postinstall": "yarn typechain"
+    "postinstall": "yarn typechain",
+    "export": "next export"
   },
   "dependencies": {
     "@synthetixio/wei": "2.74.4",
