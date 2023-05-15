@@ -9,6 +9,7 @@ module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   swcMinify: false,
   images: {
+    unoptimized: true,
     domains: [
       "tokens.1inch.io",
       "ethereum-optimism.github.io",
