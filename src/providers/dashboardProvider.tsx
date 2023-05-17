@@ -42,7 +42,7 @@ export const DashboardProvider: FC<PropsWithChildren> = ({ children }) => {
       protocolAForm: {
         name: 'Kwenta',
         chain: Chains.optimism,
-        url: 'https://kwenta.io/market/?asset=sETH',
+        url: 'https://kwenta.eth.limo/market/?asset=sETH&accountType=cross_margin',
       },
       protocolAStats: null,
       protocolBForm: {

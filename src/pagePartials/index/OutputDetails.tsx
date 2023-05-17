@@ -37,13 +37,6 @@ type Props = {
   positionSide: Position
 }
 export function OutputDetails({ comparison, local, margin, positionSide, tokenSymbol }: Props) {
-  const getTradeFeeText = (protocol: string) => {
-    const text =
-      protocol === 'Kwenta'
-        ? 'Fees are displayed as maker / taker. Maker fees apply to orders that reduce the market skew. Taker fees apply to orders that increase the market skew.'
-        : 'The cost of swapping tokens to execute the trade.'
-    return text
-  }
   const get1hrFundingText = (protocol: string) => {
     const text =
       protocol === 'Kwenta'
@@ -107,15 +100,17 @@ export function OutputDetails({ comparison, local, margin, positionSide, tokenSy
             Price Impact
           </Tooltip>
         </span>
-        <strong>{formatAmount(local.priceImpact)}</strong>
+        <strong>{formatAmount(local.priceImpact)}%</strong>
       </List>
-      <List as={motion.li} variants={itemVariants}>
+      <List
+        as={motion.li}
+        status={setStyle(local.protocolFee, comparison?.protocolFee)}
+        variants={itemVariants}
+      >
         <span>
           <Tooltip text="Fees the protocol charges for opening a position.">Protocol Fee</Tooltip>
         </span>
-        <strong>
-          {local.protocol === 'Kwenta' ? '-' : formatAmount(local.protocolFee, 18, 2)}{' '}
-        </strong>
+        <strong>{formatAmount(local.protocolFee, 18, 2)}</strong>
       </List>
       <List
         as={motion.li}
@@ -123,9 +118,7 @@ export function OutputDetails({ comparison, local, margin, positionSide, tokenSy
         variants={itemVariants}
       >
         <span>
-          <Tooltip text={getTradeFeeText(local.protocol)}>
-            {local.protocol === 'Kwenta' ? 'Trade Fee' : 'Swap Fee'}{' '}
-          </Tooltip>
+          <Tooltip text={'The cost of swapping tokens to execute the trade.'}>Swap Fee</Tooltip>
         </span>
         <strong>{formatAmount(local.swapFee, 18, 2)}</strong>
       </List>
