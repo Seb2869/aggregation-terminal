@@ -290,7 +290,7 @@ async function getKwentaStatsFetcher(
     priceImpact: positionStats.priceImpact.toBN(),
     protocolFee: positionStats.fee.toBN(),
     swapFee: ZERO_BIG_NUM,
-    executionFee: KWENTA_FIXED_FEE.toBN(),
+    executionFee: marketInformation[1].minKeeperFee,
     liquidationPrice: positionStats.liqPrice.toBN(),
     oneHourFunding: oneHourFunding,
   }
